@@ -168,20 +168,11 @@
 			
 			
 			function sb3() {
-				const paragraphs = document.querySelectorAll("p");
-				const newPara = document.createElement("p");
-				newPara.innerHTML = `
-        <em>
-        "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. 
-        Sed posuere interdum sem. Quisque ligula eros ullamcorper quis, 
-        lacinia quis facilisis sed sapien. Mauris varius diam vitae arcu. 
-        Sed arcu lectus auctor vitae, consectetuer et venenatis eget velit."
-        </em>
-		<br><br>
-        <img src="https://tse1.mm.bing.net/th/id/OIP.z2dDdSTpuBTsP6oW7unjKQHaEK?rs=1&pid=ImgDetMain&o=7&rm=3" alt="Logo">
-    `;
+				const paragraphs = document.getElementById("lorem");
+				paragraphs.innerHTML ="<em>testi </em>";
+				document.body.style.backgroundColor = "lightgreen";
 
-	paragraphs[3].after(newPara);
+
 			}
 
 			function hide() {
