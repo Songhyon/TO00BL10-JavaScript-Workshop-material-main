@@ -35,6 +35,30 @@
 			  <input type="button" name="button" id="button" value="Reserve" onclick="getData()">
 			</p>
 		</div>
+
+<script>
+function getData() {
+
+    let destination = document.getElementById("destination").value;
+    let arrival = document.getElementById("arrival").value;
+
+    
+    localStorage.setItem("destination", destination);
+    localStorage.setItem("arrival", arrival);
+
+
+    let checkboxes = [];
+    document.querySelectorAll('#services input[type="checkbox"]:checked').forEach(cb => {
+        checkboxes.push(cb.value);
+    });
+
+
+    localStorage.setItem("services", JSON.stringify(checkboxes));
+
+    alert("Data saved!");
+}
+</script>
+
 		<hr/>
 		<div>
 			<h2>Exercise 2: Reloading the saved data</h2>
@@ -45,6 +69,21 @@
 			event on the body tag.</p>
 			<div id="sessiondata">Session data goes here!</div>
 		</div>
+		<script>
+			window.onload = function() {
+				let saveddes = localStorage.getItem("destination");
+				let savedarr = localStorage.getItem("arrival");
+
+				if (saveddes || savedarr) {
+					document.getElementById("sessiondata").innerText = 
+					"destination: " + ( saveddes || "not set") + "\n" +
+					"Arrival: " + ( savedarr || "not set");
+				
+				} else {
+					document.getElementById("sessiondata").innerText = "No data saved";
+				}
+			};
+		</script>
 		<hr/>
 		<div>
 			<h2>Exercise 3: Sessionstorage vs. localstorage</h2>
