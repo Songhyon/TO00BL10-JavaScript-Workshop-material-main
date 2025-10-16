@@ -67,22 +67,32 @@ function getData() {
 			assignment, and load them into a div with an id="sessionData". This should happen when the 
 			page is loaded, because we want the data to be loaded then as well. HINT: use onLoad -
 			event on the body tag.</p>
-			<div id="sessiondata">Session data goes here!</div>
+			<div id="sessiondata">data goes here!</div>
 		</div>
 		<script>
-			window.onload = function() {
-				let saveddes = localStorage.getItem("destination");
-				let savedarr = localStorage.getItem("arrival");
+		function loadLocalData() {
+			let saveddes = localStorage.getItem("destination");
+			let savedarr = localStorage.getItem("arrival");
+			let savedservices = JSON.parse(localStorage.getItem("services"));
 
-				if (saveddes || savedarr) {
-					document.getElementById("sessiondata").innerText = 
-					"destination: " + ( saveddes || "not set") + "\n" +
-					"Arrival: " + ( savedarr || "not set");
-				
-				} else {
-					document.getElementById("sessiondata").innerText = "No data saved";
-				}
-			};
+			if (saveddes || savedarr || (savedservices && savedservices.length > 0)) {
+				document.getElementById("sessiondata").innerText = 
+					"Destination: " + (saveddes || "not set") + "\n" +
+					"Arrival: " + (savedarr || "not set") + "\n" +
+					"Services: " + ((savedservices && savedservices.length > 0) ? savedservices.join(", ") : "none");
+			} else {
+				document.getElementById("sessiondata").innerText = "No data saved";
+			}
+
+
+			if (saveddes) document.getElementById("destination").value = saveddes;
+			if (savedarr) document.getElementById("arrival").value = savedarr;
+			if (savedservices) {
+				document.querySelectorAll('#services input[type="checkbox"]').forEach(cb => {
+					cb.checked = savedservices.includes(cb.value);
+				});
+			}
+		};
 		</script>
 		<hr/>
 		<div>
@@ -92,6 +102,87 @@ function getData() {
 			happens, when you close the browser. You can utilize developer tools to study the data (F12, 
 			select Application tab, then LocalStorage on the left).</p>
 		</div>
+
+		<hr />
+			<div>
+				<label for="destination2">Destination:</label>
+				<input type="text" id="destination2">
+			</div>
+			<div>
+				<label for="arrival2">Arrival Date:</label>
+				<input type="text" id="arrival2">
+			</div>
+			<div id="services2" class="border">
+				<p>Services:</p>
+				<div><label><input type="checkbox" value="Internet">Internet</label></div>
+				<div><label><input type="checkbox" value="AC">Air Conditioning</label></div>
+				<div><label><input type="checkbox" value="Minibar">Minibar</label></div>
+				<div><label><input type="checkbox" value="Car Rent">Car rent</label></div>
+				<div><label><input type="checkbox" value="Sauna">Sauna</label></div>
+			</div>
+
+			<p>
+				<input type="button" value="Reserve (Session)" onclick="saveSessionData()">
+			</p>
+
+			<div id="sessiondisplay" class="border">
+				<h3>Saved SessionStorage Data:</h3>
+				<pre>No data saved</pre>
+			</div>
+		</div>
+
+		<script>
+		function saveSessionData() {
+			let destination = document.getElementById("destination2").value;
+			let arrival = document.getElementById("arrival2").value;
+
+
+			let services = [];
+			document.querySelectorAll('#services2 input[type="checkbox"]:checked').forEach(cb => {
+				services.push(cb.value);
+			});
+
+
+			sessionStorage.setItem("destination2", destination);
+			sessionStorage.setItem("arrival2", arrival);
+			sessionStorage.setItem("services2", JSON.stringify(services));
+
+			alert("SessionStorage data saved!");
+			loadSessionData();
+		}
+
+		function loadSessionData() {
+			let saveddes = sessionStorage.getItem("destination2");
+			let savedarr = sessionStorage.getItem("arrival2");
+			let savedservices = JSON.parse(sessionStorage.getItem("services2"));
+
+			if (saveddes || savedarr || (savedservices && savedservices.length > 0)) {
+				document.querySelector("#sessiondisplay pre").innerText =
+					"Destination: " + (saveddes || "not set") + "\n" +
+					"Arrival: " + (savedarr || "not set") + "\n" +
+					"Services: " + ((savedservices && savedservices.length > 0) ? savedservices.join(", ") : "none");
+
+				// Restore form values
+				if (saveddes) document.getElementById("destination2").value = saveddes;
+				if (savedarr) document.getElementById("arrival2").value = savedarr;
+				if (savedservices) {
+					document.querySelectorAll('#services2 input[type="checkbox"]').forEach(cb => {
+						cb.checked = savedservices.includes(cb.value);
+					});
+				}
+			} else {
+				document.querySelector("#sessiondisplay pre").innerText = "No data saved";
+			}
+		}
+
+
+		window.onload = function() {
+			loadSessionData();
+			loadLocalData();
+		};
+		</script>
+
+
 		<hr/>
 		<div>
 			<h2>Exercise 4:</h2>
